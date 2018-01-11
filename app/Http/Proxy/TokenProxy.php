@@ -67,11 +67,11 @@ class TokenProxy
             'client_secret' => 'uVRP3h6qMH544O5eYhIbBMsksE8xUp68beO6rZgq',
             'grant_type' => $grantType,
         ]);
-        $response = $this->http->post('http://environmental_detection.work/oauth/token', ['form_params' => $data]);
-//        $response = $this->http->post('http://120.78.56.75/oauth/token', ['form_params' => $data]);
+
+        $response = $this->http->post('http://120.78.56.75/oauth/token', ['form_params' => $data]);
 
         $token = json_decode((string) $response->getBody(), true);
-
+        dd($token);
         return response()->json([
             'token' => $token['access_token'],
             'expires_in' => $token['expires_in'],

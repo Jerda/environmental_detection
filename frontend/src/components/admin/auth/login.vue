@@ -88,7 +88,7 @@
                 this.$store.dispatch('loginRequest', this.form).then(response => {
                     this.$router.push({'name':'index'});
                 }).catch(error => {
-                    console.log('error');
+                    this.$message.error(error.response.data.msg);
                 });
             }
         },
@@ -99,7 +99,7 @@
                 minSpeed: 0.2,
             })
             axios.post('/api/test').then(response => {
-
+                console.log('test11111');
             });
         }
     }

@@ -35,9 +35,11 @@ class LoginController extends BaseController
 
     public function login(Request $request, TokenProxy $tokenProxy)
     {
-        if (!$this->validateLogin($request->all())) {
-            return response()->json(['msg' => $this->callback_msg], 400);
-        };
+        try {
+            $this->validateLogin($request->all());
+        } catch (\Exception $e) {
+            return $this->sendFailedLoginResponse($e->getMessage());
+        }
         //暂时不使用
         /*if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
@@ -82,17 +84,16 @@ class LoginController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            $this->callback_msg = $validator->errors();
-            return false;
+            throw new \Exception($validator->errors()->first());
         } else {
             return true;
         }
     }
 
 
-    protected function sendFailedLoginResponse()
+    protected function sendFailedLoginResponse($message)
     {
-        return response()->json(['status' => 0, 'msg' => [$this->username() => [trans('auth.failed')]]]);
+        return response()->json(['msg' => $message], 422);
     }
 
 
